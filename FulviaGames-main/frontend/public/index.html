@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎮 ITIL Quest - A Jornada do Serviço</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Modal de Boas-vindas -->
+  <div id="welcome-modal" class="modal">
+    <div class="modal-content welcome-box">
+      <h1>🎮 Bem-vindo ao ITIL Quest!</h1>
+      <p>Aventure-se pelo mundo mágico do gerenciamento de serviços de T.I!</p>
+      <div class="welcome-form">
+        <label for="player-name-input">Como você se chama, jogador?</label>
+        <input type="text" id="player-name-input" placeholder="Digite seu nome" maxlength="30">
+        <button id="start-game-btn" class="btn-primary">🚀 Começar Aventura!</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <!-- Site logo: place your 'logo.png' in 'frontend/public/' to show it here. If absent the image hides. -->
+    <img id="site-logo" src="assets/logo.png" alt="Fulvia Games" onerror="this.style.display='none'" />
+    
+    <!-- Painel do Jogador -->
+    <div class="player-panel">
+      <div class="player-info">
+        <div class="player-avatar">👤</div>
+        <div class="player-details">
+          <div class="player-name" id="player-name">Carregando...</div>
+          <div class="player-level">
+            <span id="player-level-badge">Nível 1</span>
+            <span id="player-ranking">🌱 Aprendiz</span>
+          </div>
+        </div>
+      </div>
+      <div class="player-stats">
+        <div class="stat-item">
+          <span class="stat-label">XP</span>
+          <div class="xp-bar-container">
+            <div class="xp-bar" id="xp-bar" style="width: 0%"></div>
+          </div>
+          <span class="stat-value" id="xp-text">0/100</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">⭐ Pontos</span>
+          <span class="stat-value" id="total-score">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">🏆 Conquistas</span>
+          <span class="stat-value" id="achievements-count">0/8</span>
+        </div>
+      </div>
+      <div id="combo-indicator" class="combo-indicator"></div>
+    </div>
+
+    <nav>
+      <button data-view="phase1" class="nav-btn">🔄 Fase 1: Sequência</button>
+      <button data-view="phase2" class="nav-btn">🔗 Fase 2: Conexão</button>
+      <button data-view="phase3" class="nav-btn">🎭 Fase 3: Decisão</button>
+      <button data-view="achievements" class="nav-btn">🏆 Conquistas</button>
+      <button data-view="stats" class="nav-btn">📊 Estatísticas</button>
+      <button id="reset-session-btn" class="nav-btn special" title="Trocar de jogador / nova sessão">👤 Trocar Jogador</button>
+      <button id="motivate-btn" class="nav-btn special">✨ Motivação</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Área de Feedback Global -->
+    <div id="global-message" class="global-message"></div>
+
+    <!-- Fase 1: Ordenação -->
+    <section id="phase1" class="view hidden">
+      <div class="phase-header">
+        <h2>🔄 Fase 1 — Sequência de Fluxo</h2>
+        <p class="phase-subtitle">Ordene as atividades no fluxo correto!</p>
+      </div>
+      
+      <div class="question-card">
+        <div class="question-selector">
+          <label for="p1-question">📚 Escolha a ordem correta:</label>
+          <select id="p1-question" class="styled-select"></select>
+        </div>
+        <div id="p1-description" class="question-description"></div>
+        <div id="p1-difficulty" class="difficulty-badge"></div>
+      </div>
+
+      <div class="game-area">
+        <div class="choices-panel">
+          <h3>🎯 Opções Disponíveis</h3>
+          <div id="p1-choices" class="choices-grid"></div>
+        </div>
+        <div class="answer-panel">
+          <h3>📝 Sua Ordem</h3>
+          <div id="p1-answer" class="answer-list"></div>
+          <div class="action-buttons">
+            <button id="p1-hint" class="btn-hint">💡 Dica</button>
+            <button id="p1-reset" class="btn-secondary">🔄 Limpar</button>
+            <button id="p1-validate" class="btn-primary" disabled>✅ Validar</button>
+          </div>
+        </div>
+      </div>
+      <div id="p1-result" class="result-box"></div>
+    </section>
+
+    <!-- Fase 2: Associação -->
+    <section id="phase2" class="view hidden">
+      <div class="phase-header">
+        <h2>🔗 Fase 2 — Conexão de Conceitos</h2>
+        <p class="phase-subtitle">Conecte as práticas com suas atividades!</p>
+      </div>
+
+      <div class="question-card">
+        <label for="p2-activity">🎯 Escolha uma atividade:</label>
+        <select id="p2-activity" class="styled-select"></select>
+      </div>
+
+      <div class="game-area single">
+        <div class="practices-panel">
+          <h3>⚙️ Selecione as práticas relacionadas:</h3>
+          <div id="p2-practices" class="practices-grid"></div>
+          <div class="action-buttons">
+            <button id="p2-hint" class="btn-hint">💡 Dica</button>
+            <button id="p2-validate" class="btn-primary">✅ Validar</button>
+          </div>
+        </div>
+      </div>
+      <div id="p2-result" class="result-box"></div>
+    </section>
+
+    <!-- Fase 3: Decisão -->
+    <section id="phase3" class="view hidden">
+      <div class="phase-header">
+        <h2>🎭 Fase 3 — Escolha do Caminho</h2>
+        <p class="phase-subtitle">Tome decisões sábias baseadas no cenário!</p>
+      </div>
+
+      <div class="question-card">
+        <label for="p3-scenario">🗺️ Escolha um cenário:</label>
+        <select id="p3-scenario" class="styled-select"></select>
+      </div>
+
+      <div class="scenario-box">
+        <div class="scenario-title">📖 Situação:</div>
+        <div id="p3-input" class="scenario-text"></div>
+      </div>
+
+      <div class="game-area single">
+        <h3>🎯 Qual atividade você escolhe?</h3>
+        <div id="p3-options" class="options-grid"></div>
+        <div class="action-buttons">
+          <button id="p3-hint" class="btn-hint">💡 Dica</button>
+          <button id="p3-validate" class="btn-primary" disabled>✅ Confirmar Decisão</button>
+        </div>
+      </div>
+      <div id="p3-result" class="result-box"></div>
+    </section>
+
+    <!-- Painel de Conquistas -->
+    <section id="achievements" class="view hidden">
+      <div class="phase-header">
+        <h2>🏆 Suas Conquistas</h2>
+        <p class="phase-subtitle">Desbloqueie todas as conquistas e seja um mestre!</p>
+      </div>
+      <div id="achievements-progress" class="achievements-progress"></div>
+      <div id="achievements-list" class="achievements-container"></div>
+    </section>
+
+    <!-- Painel de Estatísticas -->
+    <section id="stats" class="view hidden">
+      <div class="phase-header">
+        <h2>📊 Suas Estatísticas</h2>
+        <p class="phase-subtitle">Acompanhe sua jornada e progresso!</p>
+      </div>
+      <div id="stats-content" class="stats-container"></div>
+    </section>
+
+    <!-- Seção Sobre o Jogo -->
+    <section id="about-game" class="view hidden">
+      <h2>Sobre o Jogo</h2>
+      <p>ITIL Quest é uma jornada interativa para aprender sobre gerenciamento de serviços de TI de forma divertida e envolvente.</p>
+    </section>
+
+    <!-- Seção Como Jogar -->
+    <section id="how-to-play" class="view hidden">
+      <h2>Como Jogar</h2>
+      <ol>
+        <li>Digite seu nome e clique em "Começar Aventura".</li>
+        <li>Responda às perguntas e complete as atividades para ganhar XP e subir de nível.</li>
+        <li>Explore os cenários e tome decisões estratégicas para avançar no jogo.</li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- Modais e Overlays -->
+  <div id="achievement-modal" class="modal hidden"></div>
+  <div id="levelup-overlay" class="modal hidden"></div>
+  <div id="motivation-modal" class="modal hidden"></div>
+
+  <!-- Rodapé fixo -->
+  <footer class="footer">
+    <p>🎮 ITIL Quest v2.0 - Edição Lúdica | Desenvolvido com ❤️ para tornar o aprendizado incrível!</p>
+  </footer>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

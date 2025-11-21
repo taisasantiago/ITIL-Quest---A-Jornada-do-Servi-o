@@ -1,0 +1,13 @@
+{
+  "name": "itil-quest-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static frontend prototype for ITIL Quest",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
